@@ -1,0 +1,9 @@
+streamlit>=1.52
+pandas
+openpyxl
+plotly
+google-genai
+python-docx
+reportlab
+arabic-reshaper
+python-bidi
