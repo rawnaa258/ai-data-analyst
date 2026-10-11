@@ -23,6 +23,8 @@ SERVER_MODE = os.environ.get("APP_MODE", "").lower() == "server"
 # ---------- النصوص (عربي / إنجليزي) ----------
 STR = {
     "ar": {
+        "title": "محلل البيانات بالذكاء الاصطناعي",
+        "api_label": "مفتاح Gemini (API Key)",
         "api_caption": "المفتاح بيفضل على جهازك ومش بيتحفظ في أي مكان.",
         "upload": "ارفعي ملف Excel أو CSV",
         "no_tables": "مالقيتش أي جدول في الملف ده.",
@@ -110,6 +112,8 @@ STR = {
         ),
     },
     "en": {
+        "title": "AI Data Analyst",
+        "api_label": "Gemini API Key",
         "api_caption": "The key stays on your computer and is not saved anywhere.",
         "upload": "Upload an Excel or CSV file",
         "no_tables": "No tables were found in this file.",
@@ -214,6 +218,10 @@ def disp(name):
     return str(name)
 
 
+def ui_rtl():
+    return st.session_state.get("lang", "ar") == "ar"
+
+
 def is_rtl_text(text):
     return bool(re.search(r"[\u0600-\u06FF]", text))
 
@@ -223,10 +231,10 @@ st.session_state.setdefault("lang", "ar")
 
 RTL_CSS = """
 <style>
-[data-testid="stMarkdownContainer"], [data-testid="stHeading"],
-[data-testid="stCaptionContainer"], [data-testid="stWidgetLabel"],
-[data-testid="stMetricLabel"], [data-testid="stFileUploaderDropzoneInstructions"],
-[data-testid="stExpander"] summary { direction: rtl; text-align: right; }
+[data-testid="stMain"], [data-testid="stMainBlockContainer"],
+[data-testid="stSidebarContent"] { direction: rtl; text-align: right; }
+[data-testid="stDataFrame"], [data-testid="stPlotlyChart"],
+[data-testid="stSidebar"] input[type="password"] { direction: ltr; }
 [data-testid="stChatInput"] textarea { direction: rtl; text-align: right; }
 </style>
 """
@@ -238,8 +246,11 @@ def toggle_lang():
     st.session_state.lang = "en" if st.session_state.lang == "ar" else "ar"
 
 
-title_col, lang_col = st.columns([12, 1], vertical_alignment="center")
-title_col.title("AI Data Analyst")
+if ui_rtl():  # في الوضع العربي أول عمود بيبقى على اليمين
+    lang_col, title_col = st.columns([1, 12], vertical_alignment="center")
+else:
+    title_col, lang_col = st.columns([12, 1], vertical_alignment="center")
+title_col.title(t("title"))
 lang_col.button(
     "EN" if st.session_state.lang == "ar" else "AR",
     key="lang_btn",
@@ -248,7 +259,10 @@ lang_col.button(
 )
 
 # ---------- الشريط الجانبي: مفتاح Gemini ----------
-api_key = st.sidebar.text_input("Gemini API Key", type="password")
+api_key = st.sidebar.text_input(
+    t("api_label"), type="password", value=st.session_state.get("api_key_saved", "")
+)
+st.session_state["api_key_saved"] = api_key
 st.sidebar.caption(t("api_caption"))
 
 
@@ -691,7 +705,10 @@ def render_message(m):
     with st.chat_message(m["role"]):
         st.markdown(m["content"])
         with st.container(key=f"actions_{m['id']}"):
-            _, c1, c2 = st.columns([14, 1, 1], vertical_alignment="center")
+            if ui_rtl():
+                c1, c2, _ = st.columns([1, 1, 14], vertical_alignment="center")
+            else:
+                _, c1, c2 = st.columns([14, 1, 1], vertical_alignment="center")
             with c1:
                 copy_button(m["content"])
             with c2:
@@ -791,7 +808,10 @@ if file:
         collapsed_set = st.session_state.setdefault("collapsed_summaries", set())
         is_collapsed = sum_key in collapsed_set
 
-        title_col, fold_col, del_col = st.columns([12, 1, 1], vertical_alignment="center")
+        if ui_rtl():
+            fold_col, del_col, title_col = st.columns([1, 1, 12], vertical_alignment="center")
+        else:
+            title_col, fold_col, del_col = st.columns([12, 1, 1], vertical_alignment="center")
         title_col.subheader(t("summary_title", name=disp(table_name)))
         if current:
             fold_col.button(
