@@ -23,13 +23,13 @@ SERVER_MODE = os.environ.get("APP_MODE", "").lower() == "server"
 # ---------- النصوص (عربي / إنجليزي) ----------
 STR = {
     "ar": {
-        "title": "محلل البيانات بالذكاء الاصطناعي",
+        "title": "KAI For Data Analyst",
         "api_label": "مفتاح Gemini (API Key)",
-        "api_caption": "المفتاح بيفضل على جهازك ومش بيتحفظ في أي مكان.",
-        "upload": "ارفعي ملف Excel أو CSV",
-        "no_tables": "مالقيتش أي جدول في الملف ده.",
-        "uploaded_ok": "تم رفع الملف! لقيت {n} جدول.",
-        "choose_table": "اختاري الجدول اللي عايزة تشتغلي عليه",
+        "api_caption": "يبقى المفتاح على جهازك ولا يُحفظ في أي مكان.",
+        "upload": "ارفع ملف Excel أو CSV",
+        "no_tables": "لم أعثر على أي جدول في هذا الملف.",
+        "uploaded_ok": "تم رفع الملف بنجاح! عُثر على {n} جدول.",
+        "choose_table": "اختر الجدول الذي تريد العمل عليه",
         "tab_preview": "معاينة البيانات",
         "tab_analysis": "التحليل",
         "tab_charts": "الرسوم البيانية",
@@ -37,12 +37,12 @@ STR = {
         "tab_chat": "الدردشة",
         "rows": "عدد الصفوف",
         "cols": "عدد الأعمدة",
-        "missing": "القيم الناقصة",
-        "missing_per_col": "القيم الناقصة في كل عمود",
-        "missing_count": "عدد الناقص",
-        "num_stats": "إحصائيات الأعمدة الرقمية",
-        "no_numeric": "مفيش أعمدة رقمية في الملف ده.",
-        "need_numeric": "محتاجين عمود رقمي واحد على الأقل عشان نرسم.",
+        "missing": "القيم المفقودة",
+        "missing_per_col": "القيم المفقودة في كل عمود",
+        "missing_count": "عدد القيم المفقودة",
+        "num_stats": "إحصاءات الأعمدة الرقمية",
+        "no_numeric": "لا توجد أعمدة رقمية في هذا الملف.",
+        "need_numeric": "يلزم وجود عمود رقمي واحد على الأقل لرسم المخطط.",
         "chart_type": "نوع الرسم",
         "chart_bar": "أعمدة",
         "chart_line": "خطي",
@@ -51,68 +51,70 @@ STR = {
         "y_col": "العمود الرقمي (Y)",
         "summary_title": "ملخص: {name}",
         "fold_open": "فتح الملخص",
-        "fold_close": "طي الملخص",
-        "del_summary": "حذف الملخص ده",
-        "need_key": "حطي الـ API Key في الشريط الجانبي (على الشمال) الأول.",
-        "need_key_short": "حطي الـ API Key في الشريط الجانبي الأول.",
+        "fold_close": "طيّ الملخص",
+        "del_summary": "حذف هذا الملخص",
+        "need_key": "أدخل مفتاح API في الشريط الجانبي أولًا.",
+        "need_key_short": "أدخل مفتاح API في الشريط الجانبي أولًا.",
         "btn_rewrite": "إعادة كتابة الملخص",
-        "btn_write": "اكتبلي الملخص",
-        "spin_summary": "Gemini بيحلل البيانات...",
+        "btn_write": "اكتب الملخص",
+        "spin_summary": "يقوم Gemini بتحليل البيانات...",
         "doc_sub": "من ملف: {file}",
-        "save_word": "📄 حفظ كـ Word",
-        "save_pdf": "📕 حفظ كـ PDF",
-        "install_libs": "عشان تحفظي Word/PDF ثبّتي المكتبات بالأمر ده في الشاشة السودا:",
-        "details": "تفاصيل",
-        "saved_ok": "اتحفظ الملف في فولدر Downloads باسم: {name}",
-        "others_exp": "ملخصات محفوظة لجداول تانية ({n})",
+        "save_word": "📄 حفظ بصيغة Word",
+        "save_pdf": "📕 حفظ بصيغة PDF",
+        "install_libs": "لحفظ ملفات Word وPDF، ثبّت المكتبات بالأمر التالي في الشاشة السوداء:",
+        "details": "التفاصيل",
+        "saved_ok": "تم حفظ الملف في مجلد التنزيلات (Downloads) باسم: {name}",
+        "others_exp": "ملخصات محفوظة لجداول أخرى ({n})",
         "other_from": "**{table}** (من ملف {file})",
-        "chat_title": "اسألي ملفك أي سؤال",
-        "chat_hint": "مثال: إيه أعلى شهر في المبيعات؟ أو: متوسط المبيعات لكل منتج؟",
+        "chat_title": "اسأل ملفك أي سؤال",
+        "chat_hint": "مثال: ما أعلى شهر في المبيعات؟ أو: ما متوسط المبيعات لكل منتج؟",
         "clear_chat": "مسح المحادثة",
-        "chat_input": "اكتبي سؤالك أو سجّلي رسالة صوتية...",
-        "spin_listen": "بسمع الرسالة الصوتية...",
-        "spin_think": "بفكر وبحسب...",
-        "calc_fail": "معرفتش أحسب الإجابة دي. جربي تصيغي السؤال بشكل تاني.",
+        "chat_input": "اكتب سؤالك أو سجّل رسالة صوتية...",
+        "spin_listen": "جارٍ الاستماع إلى الرسالة الصوتية...",
+        "spin_think": "جارٍ التفكير والحساب...",
+        "calc_fail": "تعذّر عليّ حساب هذه الإجابة. حاول صياغة السؤال بطريقة أخرى.",
         "result_label": "النتيجة:",
         "copy": "نسخ",
         "delete_msg": "حذف الرسالة",
         "none": "لا يوجد",
         "quota_err": (
-            "خلّصتي الحصة المجانية اليومية من Gemini لكل الموديلات. "
-            "جربي تاني بعد ما الحصة تتجدد (غالبًا خلال كام ساعة)، "
-            "أو استخدمي مفتاح من مشروع جديد."
+            "لقد استهلكتَ الحصة المجانية اليومية من Gemini لجميع النماذج. "
+            "حاول مجددًا بعد تجدد الحصة (غالبًا خلال بضع ساعات)، "
+            "أو استخدم مفتاحًا من مشروع جديد."
         ),
-        "generic_err": "حصلت مشكلة: {msg}",
+        "generic_err": "حدثت مشكلة: {msg}",
         "facts": (
             "\nعدد الصفوف: {n}\nأسماء الأعمدة وأنواعها:\n{dtypes}\n\n"
-            "القيم الناقصة:\n{missing}\n\nإحصائيات الأعمدة الرقمية:\n{stats}\n\n"
-            "أول 15 صف من البيانات:\n{head}\n"
+            "القيم المفقودة:\n{missing}\n\nإحصاءات الأعمدة الرقمية:\n{stats}\n\n"
+            "أول 15 صفًا من البيانات:\n{head}\n"
         ),
         "summary_prompt": (
-            "إنت محلل بيانات خبير. دي معلومات عن ملف بيانات رفعه المستخدم:\n\n{facts}\n\n"
-            "اكتب بالعربي تقرير قصير وواضح فيه:\n"
-            "1. نظرة عامة: الملف ده عن إيه\n"
-            "2. أهم النتائج والاتجاهات (اذكر أرقام حقيقية من البيانات بس)\n"
-            "3. أي مشاكل في جودة البيانات\n"
+            "أنت محلل بيانات خبير. فيما يلي معلومات عن ملف بيانات رفعه المستخدم:\n\n{facts}\n\n"
+            "اكتب تقريرًا موجزًا وواضحًا باللغة العربية الفصحى، وخاطب القارئ بصيغة المذكر، "
+            "على أن يتضمن:\n"
+            "1. نظرة عامة: عمّا يتحدث الملف\n"
+            "2. أهم النتائج والاتجاهات (اذكر أرقامًا حقيقية من البيانات فقط)\n"
+            "3. أي مشكلات في جودة البيانات\n"
             "4. توصيات عملية\n\n"
-            "متخترعش أي رقم مش موجود في المعلومات اللي فوق."
+            "لا تخترع أي رقم غير موجود في المعلومات أعلاه."
         ),
         "code_prompt": (
-            "عندك جدول بيانات في pandas اسمه df.\nالأعمدة وأنواعها:\n{dtypes}\n\n"
+            "لديك جدول بيانات في pandas اسمه df.\nالأعمدة وأنواعها:\n{dtypes}\n\n"
             "أول 5 صفوف:\n{head}\n\nسؤال المستخدم: {question}\n\n"
-            "اكتب كود Python فقط (من غير شرح ومن غير import) بيحسب الإجابة\n"
-            "وبيحط الناتج في متغير اسمه result.\n"
-            "استخدم df و pd بس، ومتعدّلش df الأصلي. اكتب الكود بس."
+            "اكتب كود Python فقط (دون شرح ودون import) يحسب الإجابة\n"
+            "ويضع الناتج في متغير اسمه result.\n"
+            "استخدم df و pd فقط، ولا تعدّل df الأصلي. اكتب الكود فقط."
         ),
-        "fix_code": "\n\nالكود اللي كتبته طلع فيه خطأ: {error}\nصلّحه واكتب الكود بس.",
+        "fix_code": "\n\nالكود الذي كتبته أظهر خطأً: {error}\nصحّحه واكتب الكود فقط.",
         "answer_prompt": (
             "سؤال المستخدم: {question}\n\nنتيجة الحساب من البيانات:\n{result}\n\n"
-            "اكتب إجابة قصيرة وواضحة بالعربي بناءً على النتيجة دي بس.\n"
-            "متخترعش أي رقم مش موجود فيها."
+            "اكتب إجابة قصيرة وواضحة باللغة العربية الفصحى، وخاطب القارئ بصيغة المذكر، "
+            "بناءً على هذه النتيجة فقط.\n"
+            "لا تخترع أي رقم غير موجود فيها."
         ),
     },
     "en": {
-        "title": "AI Data Analyst",
+        "title": "KAI For Data Analyst",
         "api_label": "Gemini API Key",
         "api_caption": "The key stays on your computer and is not saved anywhere.",
         "upload": "Upload an Excel or CSV file",
@@ -226,7 +228,7 @@ def is_rtl_text(text):
     return bool(re.search(r"[\u0600-\u06FF]", text))
 
 
-st.set_page_config(page_title="AI Data Analyst", layout="wide")
+st.set_page_config(page_title="KAI For Data Analyst", layout="wide")
 st.session_state.setdefault("lang", "ar")
 
 RTL_CSS = """
@@ -243,9 +245,13 @@ RTL_CSS = """
     direction: rtl !important;
 }
 
-/* قوايم الاختيار (بتتفتح برا الصفحة) */
-[data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] { direction: rtl; }
-ul[role="listbox"] li, [data-baseweb="popover"] li { text-align: right !important; }
+/* قوائم الاختيار (بتتفتح برا الصفحة) */
+[data-baseweb="popover"], [data-baseweb="popover"] *,
+[role="listbox"], [role="listbox"] *, [role="option"], [role="option"] *,
+[data-testid="stSelectboxVirtualDropdown"], [data-testid="stSelectboxVirtualDropdown"] * {
+    direction: rtl !important;
+    text-align: right !important;
+}
 
 /* حاجات لازم تفضل من الشمال */
 [data-testid="stDataFrame"], [data-testid="stPlotlyChart"],
@@ -350,12 +356,12 @@ def run_code(code, df):
     """بينفذ الكود في بيئة مقيّدة (من غير import ولا ملفات)."""
     for pattern in FORBIDDEN:
         if re.search(pattern, code):
-            raise ValueError("الكود فيه أمر مش مسموح بيه لأسباب أمان.")
+            raise ValueError("يحتوي الكود على أمر غير مسموح به لأسباب أمنية.")
     safe_builtins = {n: getattr(builtins, n) for n in ALLOWED_BUILTINS}
     env = {"df": df.copy(), "pd": pd, "__builtins__": safe_builtins}
     exec(code, env)
     if "result" not in env:
-        raise ValueError("الكود ما حطش الناتج في متغير result.")
+        raise ValueError("لم يضع الكود الناتج في متغير result.")
     return env["result"]
 
 
@@ -588,7 +594,7 @@ def _find_arabic_font():
     for path in candidates:
         if Path(path).exists():
             return path
-    raise FileNotFoundError("مالقيتش خط بيدعم العربي على الجهاز.")
+    raise FileNotFoundError("لم أعثر على خط يدعم اللغة العربية على هذا الجهاز.")
 
 
 def summary_to_pdf(title, subtitle, text, rtl=True):
@@ -821,10 +827,7 @@ if file:
         collapsed_set = st.session_state.setdefault("collapsed_summaries", set())
         is_collapsed = sum_key in collapsed_set
 
-        if ui_rtl():
-            fold_col, del_col, title_col = st.columns([1, 1, 12], vertical_alignment="center")
-        else:
-            title_col, fold_col, del_col = st.columns([12, 1, 1], vertical_alignment="center")
+        title_col, fold_col, del_col = st.columns([12, 1, 1], vertical_alignment="center")
         title_col.subheader(t("summary_title", name=disp(table_name)))
         if current:
             fold_col.button(
