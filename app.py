@@ -232,7 +232,22 @@ st.session_state.setdefault("lang", "ar")
 RTL_CSS = """
 <style>
 [data-testid="stMain"], [data-testid="stMainBlockContainer"],
-[data-testid="stSidebarContent"] { direction: rtl; text-align: right; }
+[data-testid="stSidebarContent"] { direction: rtl; }
+
+[data-testid="stMain"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary, span, div),
+[data-testid="stSidebarContent"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary, span, div) {
+    text-align: right !important;
+}
+[data-testid="stMain"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary),
+[data-testid="stSidebarContent"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary) {
+    direction: rtl !important;
+}
+
+/* قوايم الاختيار (بتتفتح برا الصفحة) */
+[data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] { direction: rtl; }
+ul[role="listbox"] li, [data-baseweb="popover"] li { text-align: right !important; }
+
+/* حاجات لازم تفضل من الشمال */
 [data-testid="stDataFrame"], [data-testid="stPlotlyChart"],
 [data-testid="stSidebar"] input[type="password"] { direction: ltr; }
 [data-testid="stChatInput"] textarea { direction: rtl; text-align: right; }
@@ -246,10 +261,8 @@ def toggle_lang():
     st.session_state.lang = "en" if st.session_state.lang == "ar" else "ar"
 
 
-if ui_rtl():  # في الوضع العربي أول عمود بيبقى على اليمين
-    lang_col, title_col = st.columns([1, 12], vertical_alignment="center")
-else:
-    title_col, lang_col = st.columns([12, 1], vertical_alignment="center")
+# في الوضع العربي أول عمود بيبقى على اليمين (العنوان) وزرار اللغة على الشمال
+title_col, lang_col = st.columns([12, 1], vertical_alignment="center")
 title_col.title(t("title"))
 lang_col.button(
     "EN" if st.session_state.lang == "ar" else "AR",
