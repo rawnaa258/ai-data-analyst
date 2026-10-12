@@ -24,6 +24,27 @@ SERVER_MODE = os.environ.get("APP_MODE", "").lower() == "server"
 STR = {
     "ar": {
         "title": "KAI For Data Analyst",
+        "subtitle": "ارفع بياناتك، واطرح أسئلتك، واحصل على الرؤى",
+        "tagline": "حوّل بياناتك إلى رؤى",
+        "nav_overview": "نظرة عامة",
+        "nav_upload": "رفع البيانات",
+        "nav_preview": "معاينة البيانات",
+        "nav_chat": "الدردشة الذكية",
+        "nav_charts": "الرسوم البيانية",
+        "nav_report": "تقرير التحليل",
+        "up_title": "ارفع ملف Excel أو CSV",
+        "up_sub": "اسحب الملف وأفلته هنا، أو انقر للاستعراض",
+        "no_file_title": "لم يُرفع أي ملف بعد",
+        "no_file_sub": "ارفع ملفًا لتبدأ بتحليل بياناتك.",
+        "current_file": "الملف الحالي",
+        "remove_file": "إزالة الملف",
+        "go_overview": "عرض النظرة العامة",
+        "kpi_numeric": "الأعمدة الرقمية",
+        "chart1_title": "{y} حسب {x}",
+        "chart2_title": "أعلى الفئات في {x}",
+        "preview_title": "معاينة البيانات",
+        "view_all": "عرض الكل",
+        "tables_found": "الجداول المكتشفة: {n}",
         "api_label": "مفتاح Gemini (API Key)",
         "api_caption": "يبقى المفتاح على جهازك ولا يُحفظ في أي مكان.",
         "upload": "ارفع ملف Excel أو CSV",
@@ -115,6 +136,27 @@ STR = {
     },
     "en": {
         "title": "KAI For Data Analyst",
+        "subtitle": "Upload your data, ask questions, get insights",
+        "tagline": "Turn your data into insights",
+        "nav_overview": "Overview",
+        "nav_upload": "Upload Dataset",
+        "nav_preview": "Data Preview",
+        "nav_chat": "AI Chat",
+        "nav_charts": "Charts",
+        "nav_report": "Analysis Report",
+        "up_title": "Upload Excel or CSV",
+        "up_sub": "Drag and drop your file here, or click to browse",
+        "no_file_title": "No file uploaded yet",
+        "no_file_sub": "Upload a file to start analyzing your data.",
+        "current_file": "Current file",
+        "remove_file": "Remove file",
+        "go_overview": "Go to Overview",
+        "kpi_numeric": "Numeric columns",
+        "chart1_title": "{y} by {x}",
+        "chart2_title": "Top categories in {x}",
+        "preview_title": "Data Preview",
+        "view_all": "View all",
+        "tables_found": "Tables found: {n}",
         "api_label": "Gemini API Key",
         "api_caption": "The key stays on your computer and is not saved anywhere.",
         "upload": "Upload an Excel or CSV file",
@@ -233,14 +275,14 @@ st.session_state.setdefault("lang", "ar")
 
 RTL_CSS = """
 <style>
-[data-testid="stMain"], [data-testid="stMainBlockContainer"],
+[data-testid="stMainBlockContainer"],
 [data-testid="stSidebarContent"] { direction: rtl; }
 
-[data-testid="stMain"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary, span, div),
+[data-testid="stMainBlockContainer"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary, span, div),
 [data-testid="stSidebarContent"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary, span, div) {
     text-align: right !important;
 }
-[data-testid="stMain"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary),
+[data-testid="stMainBlockContainer"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary),
 [data-testid="stSidebarContent"] :is(h1, h2, h3, h4, h5, h6, p, li, label, summary) {
     direction: rtl !important;
 }
@@ -259,6 +301,86 @@ RTL_CSS = """
 [data-testid="stChatInput"] textarea { direction: rtl; text-align: right; }
 </style>
 """
+BASE_CSS = """
+<style>
+:root { --navy:#132440; --navy2:#183052; --teal:#168982; --teal-d:#0f807c; --teal-l:#4fc4b5;
+        --mint:#c6e9e6; --bg:#f7f9fc; --line:#e6ebf2; --muted:#6b7a90; }
+.stApp { background: var(--bg); }
+[data-testid="stHeader"] { background: transparent; }
+[data-testid="stAppDeployButton"] { display: none; }
+[data-testid="stMainBlockContainer"] { padding-top: 1.6rem; max-width: 1500px; }
+
+/* ===== الشريط الجانبي ===== */
+[data-testid="stSidebar"] { background: var(--navy); }
+.brand { display:flex; align-items:center; gap:.7rem; padding:.3rem .3rem 1.2rem; }
+.brand-logo { width:40px; height:40px; border-radius:12px; color:#fff; font-weight:800; font-size:1.35rem;
+              background:linear-gradient(135deg,var(--teal-l),var(--teal)); display:flex;
+              align-items:center; justify-content:center; }
+.brand-name { color:#fff; font-size:1.6rem; font-weight:700; letter-spacing:.5px; }
+.side-gap { height:1.4rem; }
+.side-tagline { color:#9fb3cf; font-size:.85rem; margin-top:1rem; }
+
+[data-testid="stSidebar"] [role="radiogroup"] { gap:.3rem; }
+[data-testid="stSidebar"] label[data-testid="stRadioOption"],
+[data-testid="stSidebar"] label[data-baseweb="radio"] { width:100%; padding:.75rem 1rem; margin:0;
+        border-radius:12px; cursor:pointer; transition:background .15s; }
+[data-testid="stSidebar"] label[data-testid="stRadioOption"]:hover,
+[data-testid="stSidebar"] label[data-baseweb="radio"]:hover { background:rgba(255,255,255,.07); }
+/* إخفاء دايرة الراديو */
+[data-testid="stSidebar"] label[data-testid="stRadioOption"] > div > div:first-child,
+[data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child { display:none !important; }
+[data-testid="stSidebar"] label[data-testid="stRadioOption"][data-selected="true"],
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) {
+        background:linear-gradient(90deg,#1f6b77,#1b8587); }
+[data-testid="stSidebar"] label[data-testid="stRadioOption"] p,
+[data-testid="stSidebar"] label[data-baseweb="radio"] p { color:#dce6f5; font-size:1.05rem; }
+[data-testid="stSidebar"] label[data-testid="stRadioOption"][data-selected="true"] p,
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) p { color:#fff; font-weight:700; }
+
+/* ===== الكروت ===== */
+[data-testid="stVerticalBlockBorderWrapper"], div[data-testid="stVerticalBlock"][class*="st-key-upcard"] {
+        background:#fff; border:1px solid var(--line) !important; border-radius:16px;
+        box-shadow:0 2px 10px rgba(19,36,64,.05); }
+.kpi { display:flex; align-items:center; gap:1rem; background:#fff; border:1px solid var(--line);
+       border-radius:16px; padding:1.1rem 1.2rem; box-shadow:0 2px 10px rgba(19,36,64,.05);
+       margin-bottom:1rem; }
+.kpi-icon { width:52px; height:52px; border-radius:50%; display:flex; align-items:center;
+            justify-content:center; flex-shrink:0; }
+.kpi-icon.teal { background:#d7f1ee; color:#168982; }
+.kpi-icon.blue { background:#dfeafb; color:#2f6fd1; }
+.kpi-icon.amber { background:#fdeccd; color:#c27a0a; }
+.kpi-icon.violet { background:#ebe3fb; color:#6a4bc4; }
+.kpi-label { color:var(--navy2); font-size:.95rem; font-weight:500; }
+.kpi-value { color:var(--navy); font-size:1.9rem; font-weight:800; line-height:1.15; }
+.page-title { font-size:2.1rem; font-weight:800; color:var(--navy2); line-height:1.2; }
+.page-sub { color:var(--muted); font-size:1rem; margin-top:.15rem; margin-bottom:1.1rem; }
+.card-title { font-size:1.15rem; font-weight:700; color:var(--navy2); margin-bottom:.5rem; }
+.file-chip { display:inline-block; background:#fff; border:1px solid var(--line); border-radius:12px;
+             padding:.55rem .9rem; color:var(--navy2); font-weight:600; }
+.empty-title { font-size:1.2rem; font-weight:700; color:var(--navy2); }
+.empty-sub { color:var(--muted); padding-bottom:.9rem; }
+.up-icon { font-size:2.4rem; color:var(--teal); text-align:center; line-height:1; }
+.up-title { font-weight:700; text-align:center; color:var(--navy2); font-size:1.15rem; margin-top:.3rem; }
+.up-sub { text-align:center; color:var(--muted); margin-bottom:.8rem; }
+[data-testid="stMainBlockContainer"] .up-icon, [data-testid="stMainBlockContainer"] .up-title,
+[data-testid="stMainBlockContainer"] .up-sub { text-align:center !important; }
+
+/* ===== أزرار وحقول ===== */
+.stButton > button, .stDownloadButton > button { border-radius:10px; border:1px solid var(--line);
+        background:#fff; color:var(--navy2); font-weight:600; }
+.stButton > button:hover, .stDownloadButton > button:hover { border-color:var(--teal); color:var(--teal); }
+[data-testid="stFileUploaderDropzone"] { border:2px dashed var(--mint); background:#f3fbfa; border-radius:14px; }
+[data-testid="stFileUploaderDropzone"] button { background:var(--teal); color:#fff; border:none; }
+[data-testid="stSidebar"] input { background:#1c3354; color:#fff; }
+
+/* ===== الدردشة ===== */
+[data-testid="stChatMessage"] { background:#edf2fa; border-radius:14px; padding:.8rem 1rem; }
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) { background:#e6f2fd; }
+[data-testid="stChatInput"] { border-radius:14px; }
+</style>
+"""
+
+st.markdown(BASE_CSS, unsafe_allow_html=True)
 if st.session_state.lang == "ar":
     st.markdown(RTL_CSS, unsafe_allow_html=True)
 
@@ -267,22 +389,38 @@ def toggle_lang():
     st.session_state.lang = "en" if st.session_state.lang == "ar" else "ar"
 
 
-# في الوضع العربي أول عمود بيبقى على اليمين (العنوان) وزرار اللغة على الشمال
-title_col, lang_col = st.columns([12, 1], vertical_alignment="center")
-title_col.title(t("title"))
-lang_col.button(
-    "EN" if st.session_state.lang == "ar" else "AR",
-    key="lang_btn",
-    on_click=toggle_lang,
-    help="Switch language / تغيير اللغة",
-)
+# ---------- الشريط الجانبي: الشعار + التنقل + مفتاح Gemini ----------
+NAV = [
+    ("overview", "home"), ("upload", "cloud_upload"), ("preview", "table_chart"),
+    ("chat", "chat"), ("charts", "bar_chart"), ("report", "description"),
+]
+NAV_ICONS = dict(NAV)
 
-# ---------- الشريط الجانبي: مفتاح Gemini ----------
+st.sidebar.markdown(
+    f"""
+    <div class="brand">
+      <div class="brand-logo">K</div>
+      <div class="brand-name">KAI</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+page = st.sidebar.radio(
+    "nav",
+    [k for k, _ in NAV],
+    format_func=lambda k: f":material/{NAV_ICONS[k]}:  {t('nav_' + k)}",
+    key="nav",
+    label_visibility="collapsed",
+)
+st.sidebar.markdown("<div class='side-gap'></div>", unsafe_allow_html=True)
 api_key = st.sidebar.text_input(
     t("api_label"), type="password", value=st.session_state.get("api_key_saved", "")
 )
 st.session_state["api_key_saved"] = api_key
 st.sidebar.caption(t("api_caption"))
+st.sidebar.markdown(
+    f"<div class='side-tagline'>✦ {t('tagline')}</div>", unsafe_allow_html=True
+)
 
 
 # ---------- دوال مساعدة للدردشة ----------
@@ -740,78 +878,252 @@ def render_message(m):
                 )
 
 
-file = st.file_uploader("📂 Excel / CSV", type=["csv", "xlsx"], key="uploader")
+# ---------- البيانات المحفوظة في الجلسة ----------
+@st.cache_data(show_spinner=False)
+def parse_tables(data, name):
+    f = io.BytesIO(data)
+    f.name = name
+    return load_tables(f)
 
-if file:
-    tables = load_tables(file)
-    if not tables:
-        st.error(t("no_tables"))
-        st.stop()
 
-    st.success(t("uploaded_ok", n=len(tables)))
+def save_upload(up):
+    """بيحفظ الملف في الجلسة عشان ميتمسحش لما تغيري الصفحة أو اللغة."""
+    data = up.getvalue()
+    if st.session_state.get("file_bytes") == data and st.session_state.get("file_name") == up.name:
+        return False
+    st.session_state.update(
+        file_bytes=data, file_name=up.name, current_table=None, messages=[]
+    )
+    return True
 
-    if len(tables) > 1:
-        keys = list(tables.keys())
+
+def remove_file():
+    for k in ("file_bytes", "file_name", "current_table"):
+        st.session_state.pop(k, None)
+    st.session_state["messages"] = []
+    st.session_state["uploader_n"] = st.session_state.get("uploader_n", 0) + 1
+
+
+def go_to(page_key):
+    st.session_state["nav"] = page_key
+
+
+def uploader_card(suffix):
+    with st.container(border=True, key=f"upcard_{suffix}"):
+        st.markdown(
+            f"<div class='up-icon'>☁</div><div class='up-title'>{t('up_title')}</div>"
+            f"<div class='up-sub'>{t('up_sub')}</div>",
+            unsafe_allow_html=True,
+        )
+        up = st.file_uploader(
+            "📂 Excel / CSV",
+            type=["csv", "xlsx"],
+            key=f"uploader_{st.session_state.get('uploader_n', 0)}_{suffix}",
+            label_visibility="collapsed",
+        )
+        if up is not None and save_upload(up):
+            st.rerun()
+
+
+# ---------- أدوات الشكل: كروت وأيقونات ورسوم ----------
+SVG = (
+    '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{}</svg>'
+)
+ICON_ROWS = SVG.format('<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>')
+ICON_COLS = SVG.format('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/>')
+ICON_MISS = SVG.format('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/>')
+ICON_NUM = SVG.format('<path d="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16"/>')
+TEAL_SEQ = ["#168982", "#4fc4b5", "#0f807c", "#8bc4bc", "#c6e9e6", "#183052"]
+
+
+def kpi(col, icon, label, value, tone="teal"):
+    col.markdown(
+        f'<div class="kpi"><div class="kpi-icon {tone}">{icon}</div>'
+        f'<div class="kpi-body"><div class="kpi-label">{label}</div>'
+        f'<div class="kpi-value">{value}</div></div></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def card_title(text):
+    st.markdown(f'<div class="card-title">{text}</div>', unsafe_allow_html=True)
+
+
+def style_fig(fig):
+    fig.update_layout(
+        margin=dict(l=10, r=10, t=10, b=10),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="#183052"),
+        colorway=TEAL_SEQ,
+        height=320,
+    )
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(gridcolor="#e6ebf2")
+    return fig
+
+
+def show_chart(fig):
+    try:
+        st.plotly_chart(fig, width="stretch")
+    except TypeError:
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def show_df(frame):
+    try:
+        st.dataframe(frame, width="stretch")
+    except TypeError:
+        st.dataframe(frame, use_container_width=True)
+
+
+# ---------- تحميل الجداول من الملف المحفوظ ----------
+tables = {}
+if st.session_state.get("file_bytes"):
+    tables = parse_tables(st.session_state["file_bytes"], st.session_state["file_name"])
+file_name = st.session_state.get("file_name")
+
+# ---------- الهيدر: العنوان + اختيار الجدول + زرار اللغة ----------
+h_title, h_table, h_lang = st.columns([5, 3, 1], vertical_alignment="center")
+h_title.markdown(
+    f'<div class="page-title">{t("title")}</div><div class="page-sub">{t("subtitle")}</div>',
+    unsafe_allow_html=True,
+)
+df, table_name = None, None
+if tables:
+    keys = list(tables.keys())
+    if len(keys) > 1:
         labels = [disp(k) for k in keys]
         saved = st.session_state.get("current_table")
-        chosen = st.selectbox(
-            t("choose_table"), labels, index=keys.index(saved) if saved in keys else 0
+        chosen = h_table.selectbox(
+            t("choose_table"), labels,
+            index=keys.index(saved) if saved in keys else 0,
+            label_visibility="collapsed",
         )
         table_name = keys[labels.index(chosen)]
     else:
-        table_name = list(tables.keys())[0]
+        table_name = keys[0]
+        h_table.markdown(f'<div class="file-chip">📄 {file_name}</div>', unsafe_allow_html=True)
     df = tables[table_name]
-
-    # لو غيّرتي الجدول، نمسح المحادثة القديمة
     if st.session_state.get("current_table") != table_name:
         st.session_state["current_table"] = table_name
         st.session_state["messages"] = []
+elif st.session_state.get("file_bytes"):
+    st.error(t("no_tables"))
 
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(
-        [t("tab_preview"), t("tab_analysis"), t("tab_charts"), t("tab_summary"), t("tab_chat")]
-    )
+h_lang.button(
+    "EN" if st.session_state.lang == "ar" else "AR",
+    key="lang_btn",
+    on_click=toggle_lang,
+    help="Switch language / تغيير اللغة",
+)
 
-    numeric_cols = df.select_dtypes(include="number").columns.tolist()
+numeric_cols = df.select_dtypes(include="number").columns.tolist() if df is not None else []
 
-    # ---------- التبويب 1: المعاينة ----------
-    with tab1:
-        col1, col2, col3 = st.columns(3)
-        col1.metric(t("rows"), len(df))
-        col2.metric(t("cols"), len(df.columns))
-        col3.metric(t("missing"), int(df.isna().sum().sum()))
-        st.dataframe(df.head(50), use_container_width=True)
+# ---------- صفحة رفع البيانات + حالة عدم وجود ملف ----------
+if df is None and page != "upload":
+    with st.container(border=True):
+        st.markdown(
+            f'<div class="empty-title">{t("no_file_title")}</div>'
+            f'<div class="empty-sub">{t("no_file_sub")}</div>',
+            unsafe_allow_html=True,
+        )
+    uploader_card("empty")
 
-    # ---------- التبويب 2: التحليل ----------
-    with tab2:
-        st.subheader(t("missing_per_col"))
-        st.dataframe(df.isna().sum().rename(t("missing_count")))
+if page == "upload":
+    uploader_card("main")
+    if df is not None:
+        with st.container(border=True):
+            card_title(t("current_file"))
+            st.markdown(f'<div class="file-chip">📄 {file_name}</div>', unsafe_allow_html=True)
+            st.caption(t("tables_found", n=len(tables)))
+            b1, b2, _ = st.columns([1, 1, 3])
+            b1.button(t("go_overview"), key="go_ov", on_click=go_to, args=("overview",))
+            b2.button(t("remove_file"), key="rm_file", on_click=remove_file)
+
+if df is not None:
+    # ---------- نظرة عامة ----------
+    if page == "overview":
+        k1, k2, k3, k4 = st.columns(4)
+        kpi(k1, ICON_ROWS, t("rows"), f"{len(df):,}", "teal")
+        kpi(k2, ICON_COLS, t("cols"), len(df.columns), "blue")
+        kpi(k3, ICON_MISS, t("missing"), int(df.isna().sum().sum()), "amber")
+        kpi(k4, ICON_NUM, t("kpi_numeric"), len(numeric_cols), "violet")
+
+        cat_cols = [c for c in df.columns if c not in numeric_cols]
         if numeric_cols:
-            st.subheader(t("num_stats"))
-            st.dataframe(df[numeric_cols].describe())
+            y = numeric_cols[0]
+            x = cat_cols[0] if cat_cols else None
+            left, right = st.columns(2)
+            with left:
+                with st.container(border=True):
+                    card_title(t("chart1_title", y=y, x=x if x is not None else "#"))
+                    fig = px.line(df, x=x, y=y) if x is not None else px.line(df, y=y)
+                    fig.update_traces(line_color="#168982", fill="tozeroy", fillcolor="rgba(22,137,130,0.12)")
+                    show_chart(style_fig(fig))
+            with right:
+                with st.container(border=True):
+                    if x is not None:
+                        card_title(t("chart2_title", x=x))
+                        top = (
+                            df.groupby(x)[y].sum().sort_values(ascending=False).head(8).reset_index()
+                        )
+                        fig2 = px.bar(top, x=x, y=y)
+                        fig2.update_traces(marker_color="#239189")
+                        show_chart(style_fig(fig2))
+                    else:
+                        card_title(t("num_stats"))
+                        show_df(df[numeric_cols].describe())
         else:
-            st.info(t("no_numeric"))
-
-    # ---------- التبويب 3: الرسوم ----------
-    with tab3:
-        if not numeric_cols:
             st.info(t("need_numeric"))
-        else:
-            chart_keys = ["bar", "line", "pie"]
-            chart_labels = [t("chart_" + k) for k in chart_keys]
-            chart_type = chart_keys[chart_labels.index(st.selectbox(t("chart_type"), chart_labels))]
-            x_col = st.selectbox(t("x_col"), df.columns.tolist())
-            y_col = st.selectbox(t("y_col"), numeric_cols)
 
-            if chart_type == "bar":
-                fig = px.bar(df, x=x_col, y=y_col)
-            elif chart_type == "line":
-                fig = px.line(df, x=x_col, y=y_col)
+        with st.container(border=True):
+            p_title, p_btn = st.columns([6, 1], vertical_alignment="center")
+            p_title.markdown(f'<div class="card-title">{t("preview_title")}</div>', unsafe_allow_html=True)
+            p_btn.button(t("view_all"), key="view_all", on_click=go_to, args=("preview",))
+            show_df(df.head(8))
+
+    # ---------- معاينة البيانات + التحليل ----------
+    if page == "preview":
+        with st.container(border=True):
+            card_title(t("preview_title"))
+            show_df(df.head(50))
+        with st.container(border=True):
+            card_title(t("missing_per_col"))
+            show_df(df.isna().sum().rename(t("missing_count")))
+        with st.container(border=True):
+            card_title(t("num_stats"))
+            if numeric_cols:
+                show_df(df[numeric_cols].describe())
             else:
-                fig = px.pie(df, names=x_col, values=y_col)
-            st.plotly_chart(fig, use_container_width=True)
+                st.info(t("no_numeric"))
+
+    # ---------- الرسوم البيانية ----------
+    if page == "charts":
+        with st.container(border=True):
+            if not numeric_cols:
+                st.info(t("need_numeric"))
+            else:
+                chart_keys = ["bar", "line", "pie"]
+                chart_labels = [t("chart_" + k) for k in chart_keys]
+                c_a, c_b, c_c = st.columns(3)
+                chart_type = chart_keys[chart_labels.index(c_a.selectbox(t("chart_type"), chart_labels))]
+                x_col = c_b.selectbox(t("x_col"), df.columns.tolist())
+                y_col = c_c.selectbox(t("y_col"), numeric_cols)
+
+                if chart_type == "bar":
+                    fig = px.bar(df, x=x_col, y=y_col)
+                    fig.update_traces(marker_color="#239189")
+                elif chart_type == "line":
+                    fig = px.line(df, x=x_col, y=y_col)
+                    fig.update_traces(line_color="#168982")
+                else:
+                    fig = px.pie(df, names=x_col, values=y_col)
+                show_chart(style_fig(fig))
 
     # ---------- التبويب 4: الملخص الذكي ----------
-    with tab4:
+    if page == "report":
         # الملخصات بتتحفظ في ملف summaries.json جنب app.py، فمبتتمسحش
         if "summaries" not in st.session_state:
             st.session_state.summaries = load_summaries()
@@ -821,7 +1133,7 @@ if file:
                 f_name, _, t_name = k.partition("|")
                 summaries[k] = {"table": t_name.strip() or k, "file": f_name.strip(), "text": v}
 
-        sum_key = f"{file.name} | {table_name}"
+        sum_key = f"{file_name} | {table_name}"
         current = summaries.get(sum_key)
 
         collapsed_set = st.session_state.setdefault("collapsed_summaries", set())
@@ -859,7 +1171,7 @@ if file:
                 client = genai.Client(api_key=api_key)
                 with st.spinner(t("spin_summary")):
                     text = ask_gemini(client, prompt)
-                summaries[sum_key] = {"table": table_name, "file": file.name, "text": text}
+                summaries[sum_key] = {"table": table_name, "file": file_name, "text": text}
                 save_summaries(summaries)
                 collapsed_set.discard(sum_key)
                 st.rerun()  # نعيد الرسم عشان زراير الطي والحذف تظهر فورًا
@@ -869,7 +1181,7 @@ if file:
         if current and not is_collapsed:
             st.markdown(current["text"])
             doc_title = t("summary_title", name=disp(table_name))
-            doc_sub = t("doc_sub", file=file.name)
+            doc_sub = t("doc_sub", file=file_name)
             doc_rtl = is_rtl_text(current["text"])
             d1, d2, _ = st.columns([1, 1, 3])
             saved_path = None
@@ -931,7 +1243,7 @@ if file:
                         st.divider()
 
     # ---------- التبويب 5: الدردشة مع البيانات ----------
-    with tab5:
+    if page == "chat":
         st.markdown(CHAT_CSS, unsafe_allow_html=True)
         st.subheader(t("chat_title"))
         st.caption(t("chat_hint"))
